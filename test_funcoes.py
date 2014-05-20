@@ -1,8 +1,10 @@
 import unittest
 from funcoes import *
 
-def test_geraTabuleiro(self):
-	self.assertEqual(geraTabuleiro()[0].cor,'peto')
+
+class testa_funcoes(unittest.TestCase):
+	def test_geraTabuleiro(self):
+		self.assertEqual(geraTabuleiro()[0].cor,'preto')
 
 
 
