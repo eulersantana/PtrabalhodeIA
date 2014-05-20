@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Cor = [verde,preto, cinza]
+# avaliacao =  quantos estão na posição correta
+
+
 class Posicao:
 
 	def __init__(self,x,y):
@@ -14,7 +19,7 @@ class Componente:
 
 class Estado:
 
-	def __init__(self, componentes,visitado = False, custo = 1, avaliacao,solucao = False):
+	def __init__(self, componentes,visitado, custo , avaliacao,solucao ):
 		self.componentes 	= componentes		
 		self.visitado 		= visitado
 		self.custo 			= custo
