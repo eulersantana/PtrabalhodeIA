@@ -2,11 +2,11 @@ from estado  import *
 
 
 cor = ["verde","preto","cinza"]
-movimentacao = {"cima": 1, "baixo": 2, "direita": 3, "esquerda": 4}
+move = {"cima": -1, "baixo": 1, "direita": -1, "esquerda": 1}
 # gerador de estado
 
-def geraEstados(estadoAtual,movimento,tabuleiro):
-	novoComponentes = []
+def buscaCega(estadoInicial,tabuleiro):
+	caminho = []
 	for pos in tabuleiro:
 		if mevimento == cima and pos.posicao.y:
 			if estadoAtual.componentes[0].posicao.x -1 == pos.posicao.x  and  estadoAtual.componentes[0].posicao.y == pos.posicao.y:

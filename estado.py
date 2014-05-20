@@ -25,3 +25,9 @@ class Estado:
 		self.visitado 		= visitado
 		self.custo 			= custo
 		self.avaliacao 		= avaliacao
+
+class Transicao:
+
+	def __init__(self,estado, movimento):
+		self.estado    = estado
+		self.movimento = movimento
