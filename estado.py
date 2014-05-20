@@ -12,9 +12,10 @@ class Posicao:
 
 class Componente:
 
-	def __init__(self, cor, posicao):
+	def __init__(self, cor, posicao,solucao):
 		self.cor 		= cor
 		self.posicao 	= posicao
+		self.solucao	= solucao
 		
 
 class Estado:
@@ -24,4 +25,3 @@ class Estado:
 		self.visitado 		= visitado
 		self.custo 			= custo
 		self.avaliacao 		= avaliacao
-		self.solucao		= solucao
