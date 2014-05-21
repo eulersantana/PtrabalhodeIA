@@ -11,6 +11,9 @@ class Bola:
     def __add__(self, bola):
         return Bola(self.x + bola.x, self.y + bola.y)
         
+    def __sub__(self, bola):
+        return Bola(self.x - bola.x, self.y - bola.y)
+        
 
 bolas = (Bola(x,y), Bola(x,y), Bola(x,y))
 
@@ -39,7 +42,7 @@ class Estado:
         self.avaliacao      = avaliacao
 
 class Transicao:
-	
+
 	def __init__(self,estado, filhos):
 		self.estado   = estado
 		self.filhos   = filhos 

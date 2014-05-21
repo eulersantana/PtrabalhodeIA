@@ -29,7 +29,7 @@ Tabuleiro = [           # 26
 #     'os', 'o', '_'
 # ]
 
-Tabuleiro = [           # 62
+Tabuleiro = [           # 62g
     'X', 'X', 'o',
     's', 's', 'os',
     '_', '_', 'o'

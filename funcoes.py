@@ -20,27 +20,8 @@ def definirMovimento(estadoAtual):
 def calculaAvaliacao():
     pass
 
-def verificarParede(posicao):
-    for tab in tabuleiro:
-        if tab.posicao.x == posicao.x:
-            if tab.posicao.y == posicao.y:
-                if tab.cor == 'cinza':
-                    return False
-    return True
 
-def posicaoOcupada(posicao, nPontos):
-    """
-    Verifica sobreposicao de pontos
-    """
 
-    if len(nPontos):
-        return True
-    else:
-        for nP in nPontos:
-            if nP.posicao.x == posicao.x and nP.posicao.y == posicao.y:
-                return False
-
-    return True
 
 def buscaCega(estadoInicial, tabuleiro):
     caminho = []
@@ -48,9 +29,9 @@ def buscaCega(estadoInicial, tabuleiro):
         pass      
 
 tabuleiro = [
-    '_', 'X', '_',
-    'o', 's', 's',
-    'X', 'o', 'os',
+    ['_', 'X', '_'],
+    ['o', 's', 's'],
+    ['X', 'o', 'os']
 ]
 
 def geraArvore():
@@ -62,11 +43,91 @@ movimentos = {
     'esquerda': Bola(-1, 0),
     'direita': Bola(1, 0)
 }
+def verificarParede(posicao):
+	for pA in posicao:
+		if tabuleiro[pA.x][pA.y] == 'X':
+			return False
+	return True
+
+def  retorna():
+	if move_to == "cima":
+		nnPontos.append(nPontos[0] + movimentos["baixo"])
+	if move_to == "baixo":
+		nnPontos.append(nPontos[0] - movimentos["cima"])
+	if move_to == "direta":
+		nnPontos.append(nPontos[0] + movimentos["esquerda"])
+	if move_to == "esquerda":
+		nnPontos.append(nPontos[0] + movimentos["direita"])
+
+		
+	if move_to == "cima":
+		nnPontos.append(nPontos[1] + movimentos["baixo"])
+	if move_to == "baixo":
+		nnPontos.append(nPontos[1] - movimentos["cima"])
+	if move_to == "direta":
+		nnPontos.append(nPontos[1] + movimentos["esquerda"])
+	if move_to == "esquerda":
+		nnPontos.append(nPontos[1] + movimentos["direita"])
+
+def posicaoOcupada(nPontos,movi_to):
+	nnPontos = []
+    if nPontos[0].x == nPontos[1].x and nPontos[0].y == nPontos[1].y:
+    	if move_to == "cima":
+    		nnPontos.append(nPontos[0] + movimentos["baixo"])
+    	if move_to == "baixo":
+    		nnPontos.append(nPontos[0] - movimentos["cima"])
+    	if move_to == "direta":
+    		nnPontos.append(nPontos[0] + movimentos["esquerda"])
+    	if move_to == "esquerda":
+    		nnPontos.append(nPontos[0] + movimentos["direita"])
+
+
+    	if move_to == "cima":
+    		nnPontos.append(nPontos[1] + movimentos["baixo"])
+    	if move_to == "baixo":
+    		nnPontos.append(nPontos[1] - movimentos["cima"])
+    	if move_to == "direta":
+    		nnPontos.append(nPontos[1] + movimentos["esquerda"])
+    	if move_to == "esquerda":
+    		nnPontos.append(nPontos[1] + movimentos["direita"])
+
+
+   	if nPontos[1].x == nPontos[2].x and nPontos[1].y == nPontos[2].y:
+   		if move_to == "cima":
+    		nnPontos.append(nPontos[1] + movimentos["baixo"])
+    	if move_to == "baixo":
+    		nnPontos.append(nPontos[1] - movimentos["cima"])
+    	if move_to == "direta":
+    		nnPontos.append(nPontos[1] + movimentos["esquerda"])
+    	if move_to == "esquerda":
+    		nnPontos.append(nPontos[1] + movimentos["direita"])
+
+    		
+    	if move_to == "cima":
+    		nnPontos.append(nPontos[2] + movimentos["baixo"])
+    	if move_to == "baixo":
+    		nnPontos.append(nPontos[2] - movimentos["cima"])
+    	if move_to == "direta":
+    		nnPontos.append(nPontos[2] + movimentos["esquerda"])
+    	if move_to == "esquerda":
+    		nnPontos.append(nPontos[2] + movimentos["direita"])
+
+   	if nPontos[0].x == nPontos[2].x and nPontos[0].y == nPontos[2].y:
+
+
+
+
+    
 
 def calcFilhos(no):
+	novosPontos = []
     for move in ['cima', 'baixo', 'esquerda', 'direita']:
         for bola in bolas:
-            nova_bola = bola + movimentos[move]
+            novosPontos.append(bola + movimentos[move])
+        if verificarParede(novosPontos):
+        	if()
+
+
 
 def geraTabuleiro():    
     tabuleiro = []
@@ -103,10 +164,5 @@ def geraTabuleiro():
                 tabuleiro.append(Componente(cor[1],Posicao(x,y),False))
     return tabuleiro
 
-
-
-
-        
->>>>>>> d4b6325919f8d1c5d15db4aea9729ecb2a838d1a
 
 
