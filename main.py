@@ -29,7 +29,7 @@ Tabuleiro = [           # 26
 #     'os', 'o', '_'
 # ]
 
-Tabuleiro = [           # 61
+Tabuleiro = [           # 62
     'X', 'X', 'o',
     's', 's', 'os',
     '_', '_', 'o'
@@ -95,22 +95,19 @@ class Estado(object):
 
         Estado.id_global += 1
 
-        self.nivel = pai.nivel + 1 if pai else 1
+        self.nivel = pai.nivel + 1 if pai else 0
 
     def add_bola(self, posicao):
         self.bolas.append(posicao)
 
     def check_sucessos(self):
-        
+
         for bola in self.bolas:
             if 's' in Tabuleiro[bola.x + bola.y * 3]:
                 self.sucessos += 1
-    
+
     def calcAvaliacao(self):
         self.avaliacao = 3 - self.sucessos
-
-
-                   
 
     def __str__(self):
         return "{nivel %d => [%s, %s, %s] %d - %d}" % (self.nivel, self.bolas[0], self.bolas[1], self.bolas[2], self.sucessos,self.avaliacao)
@@ -169,10 +166,8 @@ def filho_largura(no):
     # para cada tipo de movimento
     for move, delta_pos in Movimento.items():
 
-        #a = raw_input()
-
-        if Oposto[no.move] == move and no.pai.move == move:
-            continue
+        #if Oposto[no.move] == move and no.pai.move == move:
+        #    continue
 
         filho = Estado(no, move)
 
@@ -204,6 +199,7 @@ def filho_largura(no):
 
     return True
 
+
 def busca_A():
     global largura_stash
 
@@ -213,19 +209,17 @@ def busca_A():
 
     print '%10s - %s' % ('inicial', estado_inicial)
 
-    continuar = True
-
     def ordenaA(estado):
         return estado.avaliacao + estado.nivel
 
-    while continuar:
+    while largura_stash[0].sucessos != 3:
         print "\n"
-        print "no %d" % largura_stash[0].id        
+        print "no %d" % largura_stash[0].id
+        filho_A(largura_stash.pop(0))
         largura_stash = sorted(largura_stash, key=ordenaA)
-        continuar = filho_A(largura_stash.pop(0))
 
     solucao = []
-    pai = largura_stash[-1]
+    pai = largura_stash[0]
 
     # verificar percuso de resolucao
     while pai != estado_inicial:
@@ -239,16 +233,15 @@ def busca_A():
     print "\n"
     print solucao
 
+
 def filho_A(no):
     global largura_stash
 
     # para cada tipo de movimento
     for move, delta_pos in Movimento.items():
 
-        #a = raw_input()
-
-        if Oposto[no.move] == move and no.pai.move == move:
-            continue
+        #if Oposto[no.move] == move and no.pai.move == move:
+        #    continue
 
         filho = Estado(no, move)
 
@@ -273,14 +266,10 @@ def filho_A(no):
 
         filho.check_sucessos()
         filho.calcAvaliacao()
+
         print "%10s - %2d - %s" % (move, filho.id, filho)
+
         largura_stash.append(filho)
-
-        if filho.sucessos == 3:
-            return False
-
-    return True
-
 
 
 def main():
