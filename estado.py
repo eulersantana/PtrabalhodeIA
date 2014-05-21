@@ -28,6 +28,6 @@ class Estado:
 
 class Transicao:
 
-	def __init__(self,estado, movimento, filhos):
-		self.estado    = estado
+	def __init__(self,estado, filhos):
+		self.estado   = estado
 		self.filhos   = filhos 

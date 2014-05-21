@@ -2,13 +2,12 @@ from estado  import *
 
 
 cor = ["verde","preto","cinza"]
-move = {"cima": [-1,1], "baixo": [1,2], "direita": [1,3], "esquerda": [-1,4]}
+move = {"cima": [1,1], "baixo": [1,2], "direita": [1,3], "esquerda": [1,4]}
+tabuleiro = []
 # gerador de estado
 
-def definirMovimento(estadoAtual):
-	acao = []
-	for comp in range estadoAtual.componentes:
 def calculaAvaliacao():
+
 # Verifica se há uma parede	
 def verificarParede(posicao):
 	for tab in tabuleiro:
@@ -17,6 +16,7 @@ def verificarParede(posicao):
 				if tab.cor == 'cinza':
 					return False
 	return True
+
 # Verifica sobreposicao de pontos
 def posicaoOcupada(posicao, nPontos):
 	if len(nPontos):
@@ -25,8 +25,18 @@ def posicaoOcupada(posicao, nPontos):
 		for nP in nPontos:
 			if nP.posicao.x == posicao.x and nP.posicao.y == posicao.y:
 				return False
-
 	return True
+
+#
+# Gerando Arvore de posibilidades
+def gerandoArvore(estadoInicial):
+	for posA in estadoInicial.componetes:
+		if posA.posicao.x - move["cima"][0] >= 0 and posA.posicao.x - move["cima"][0] <= 2:
+
+
+
+
+
 def buscaCega(estadoInicial,tabuleiro):
 	caminho = []
 	for pos in tabuleiro:
@@ -35,8 +45,7 @@ def buscaCega(estadoInicial,tabuleiro):
 
 
 
-def geraTabuleiro():	
-	tabuleiro = []
+def geraTabuleiro():
 	for x in range(0,3):
 		for y in range(0,3):
 			# barreiras
@@ -53,7 +62,7 @@ def geraTabuleiro():
 				tabuleiro.append(Componente(cor[0],Posicao(x,y),True))
 			elif True:	
 				tabuleiro.append(Componente(cor[1],Posicao(x,y),False))
-	return tabuleiro
+
 
 
 
