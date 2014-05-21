@@ -1,8 +1,32 @@
-Tabuleiro = [
+Tabuleiro = [           # 6
     '_', 'X', '_',
     'o', 's', 's',
     'X', 'o', 'os'
 ]
+
+# Tabuleiro = [           # 59
+#     'o', 'o', 'o',
+#     'X', 's', 'X',
+#     's', 's', '_'
+# ]
+
+# Tabuleiro = [           # 60
+#     'os', 'o', 'X',
+#     'os', '_', 'X',
+#     's', '_', '_'
+# ]
+
+# Tabuleiro = [           # 61
+#     'X', 's', '_',
+#     'o', 'X', 's',
+#     'os', 'o', '_'
+# ]
+
+# Tabuleiro = [           # 61
+#     'X', 'X', 'o',
+#     's', 's', 'os',
+#     '_', '_', 'o'
+# ]
 
 Movimento = {
     'cima': (0, -1),
@@ -50,11 +74,17 @@ class Posicao(object):
         return '(%d, %d)' % (self.x, self.y)
 
 class Estado(object):
+    id_global = 0
 
     def __init__(self, pai, move):
         self.bolas = []
         self.pai = pai
         self.move = move
+        self.id = Estado.id_global
+
+        Estado.id_global += 1
+
+        self.nivel = pai.nivel + 1 if pai else 1
 
     def add_bola(self, posicao):
         self.bolas.append(posicao)
@@ -66,7 +96,7 @@ class Estado(object):
                 self.sucessos += 1
 
     def __str__(self):
-        return "{[%s, %s, %s] %d}" % (self.bolas[0], self.bolas[1], self.bolas[2], self.sucessos)
+        return "{nivel %d => [%s, %s, %s] %d}" % (self.nivel, self.bolas[0], self.bolas[1], self.bolas[2], self.sucessos)
 
 estado_inicial = Estado(None, '')
 
@@ -87,23 +117,52 @@ def genTabuleiro():
 largura_stash = []
 
 def busca_largura():
+    global largura_stash
+
     estado_inicial.check_sucessos()
-    largura_stash = [estado_inicial]
+    largura_stash.append(estado_inicial)
 
-    print estado_inicial
+    print '%10s - %s' % ('inicial', estado_inicial)
 
-    while largura_stash:
-        filho_largura(largura_stash.pop(0))
+    continuar = True
+
+    while continuar:
+        print "\n"
+        print "no %d" % largura_stash[0].id
+        continuar = filho_largura(largura_stash.pop(0))
+
+    solucao = []
+    pai = largura_stash[-1]
+
+    # verificar percuso de resolucao
+    while pai != estado_inicial:
+        solucao.append(pai.move)
+        pai = pai.pai
+
+    # colocar solucao ao contrario, do primeiro para o ultimo
+    solucao.reverse()
+
+    # printa a solucao
+    print "\n"
+    print solucao
 
 def filho_largura(no):
+    global largura_stash
+
     # para cada tipo de movimento
     for move, delta_pos in Movimento.items():
 
-        if Oposto[no.move] == move:
+        #a = raw_input()
+
+        if Oposto[no.move] == move and no.pai.move == move:
             continue
 
         filho = Estado(no, move)
-        ordenado = sorted(no.bolas, key=lambda bola: bola.x * - delta_pos[0] * bola.y * - delta_pos[1])
+
+        def ordena(bola):
+            return bola.x * - delta_pos[0] + bola.y * - delta_pos[1]
+
+        ordenado = sorted(no.bolas, key=ordena)
 
         igual_pai = 0
 
@@ -121,10 +180,19 @@ def filho_largura(no):
 
         filho.check_sucessos()
 
-        if filho.sucessos != 3:
-            largura_stash.append(filho)
+        print "%10s - %2d - %s" % (move, filho.id, filho)
+        largura_stash.append(filho)
 
-        print filho
+        if filho.sucessos == 3:
+            return False
+
+    return True
+
+def busca_A():
+    pass
+
+def filho_A():
+    pass
 
 def main():
     genTabuleiro()
