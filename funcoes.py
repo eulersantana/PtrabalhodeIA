@@ -9,8 +9,24 @@ def definirMovimento(estadoAtual):
 	acao = []
 	for comp in range estadoAtual.componentes:
 def calculaAvaliacao():
-	
+# Verifica se há uma parede	
+def verificarParede(posicao):
+	for tab in tabuleiro:
+		if tab.posicao.x == posicao.x:
+			if tab.posicao.y == posicao.y:
+				if tab.cor == 'cinza':
+					return False
+	return True
+# Verifica sobreposicao de pontos
+def posicaoOcupada(posicao, nPontos):
+	if len(nPontos):
+		return True
+	else:
+		for nP in nPontos:
+			if nP.posicao.x == posicao.x and nP.posicao.y == posicao.y:
+				return False
 
+	return True
 def buscaCega(estadoInicial,tabuleiro):
 	caminho = []
 	for pos in tabuleiro:
