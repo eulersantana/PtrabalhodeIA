@@ -4,11 +4,18 @@ Tabuleiro = [           # 6
     'X', 'o', 'os'
 ]
 
-# Tabuleiro = [           # 59
-#     'o', 'o', 'o',
-#     'X', 's', 'X',
-#     's', 's', '_'
-# ]
+Tabuleiro = [           # 59
+    'o', 'o', 'o',
+    'X', 's', 'X',
+    's', 's', '_'
+]
+
+Tabuleiro = [           # 26
+    'o', 'o', 's',
+    'X', 's', 's',
+    'o', '_', 'X'
+]
+
 
 # Tabuleiro = [           # 60
 #     'os', 'o', 'X',
@@ -22,11 +29,11 @@ Tabuleiro = [           # 6
 #     'os', 'o', '_'
 # ]
 
-# Tabuleiro = [           # 61
-#     'X', 'X', 'o',
-#     's', 's', 'os',
-#     '_', '_', 'o'
-# ]
+Tabuleiro = [           # 61
+    'X', 'X', 'o',
+    's', 's', 'os',
+    '_', '_', 'o'
+]
 
 Movimento = {
     'cima': (0, -1),
@@ -44,6 +51,7 @@ Oposto = {
 }
 
 Sucessos = []
+heuristica = []
 
 class Posicao(object):
 
@@ -81,6 +89,9 @@ class Estado(object):
         self.pai = pai
         self.move = move
         self.id = Estado.id_global
+        self.sucessos = 0
+        self.avaliacao = 0
+
 
         Estado.id_global += 1
 
@@ -90,13 +101,19 @@ class Estado(object):
         self.bolas.append(posicao)
 
     def check_sucessos(self):
-        self.sucessos = 0
+        
         for bola in self.bolas:
             if 's' in Tabuleiro[bola.x + bola.y * 3]:
                 self.sucessos += 1
+    
+    def calcAvaliacao(self):
+        self.avaliacao = 3 - self.sucessos
+
+
+                   
 
     def __str__(self):
-        return "{nivel %d => [%s, %s, %s] %d}" % (self.nivel, self.bolas[0], self.bolas[1], self.bolas[2], self.sucessos)
+        return "{nivel %d => [%s, %s, %s] %d - %d}" % (self.nivel, self.bolas[0], self.bolas[1], self.bolas[2], self.sucessos,self.avaliacao)
 
 estado_inicial = Estado(None, '')
 
@@ -179,7 +196,6 @@ def filho_largura(no):
             continue
 
         filho.check_sucessos()
-
         print "%10s - %2d - %s" % (move, filho.id, filho)
         largura_stash.append(filho)
 
@@ -189,14 +205,88 @@ def filho_largura(no):
     return True
 
 def busca_A():
-    pass
+    global largura_stash
 
-def filho_A():
-    pass
+    estado_inicial.check_sucessos()
+    estado_inicial.calcAvaliacao()
+    largura_stash.append(estado_inicial)
+
+    print '%10s - %s' % ('inicial', estado_inicial)
+
+    continuar = True
+
+    def ordenaA(estado):
+        return estado.avaliacao + estado.nivel
+
+    while continuar:
+        print "\n"
+        print "no %d" % largura_stash[0].id        
+        largura_stash = sorted(largura_stash, key=ordenaA)
+        continuar = filho_A(largura_stash.pop(0))
+
+    solucao = []
+    pai = largura_stash[-1]
+
+    # verificar percuso de resolucao
+    while pai != estado_inicial:
+        solucao.append(pai.move)
+        pai = pai.pai
+
+    # colocar solucao ao contrario, do primeiro para o ultimo
+    solucao.reverse()
+
+    # printa a solucao
+    print "\n"
+    print solucao
+
+def filho_A(no):
+    global largura_stash
+
+    # para cada tipo de movimento
+    for move, delta_pos in Movimento.items():
+
+        #a = raw_input()
+
+        if Oposto[no.move] == move and no.pai.move == move:
+            continue
+
+        filho = Estado(no, move)
+
+        def ordena(bola):
+            return bola.x * - delta_pos[0] + bola.y * - delta_pos[1]
+
+        ordenado = sorted(no.bolas, key=ordena)
+
+        igual_pai = 0
+
+        for bola in ordenado:
+            nova_bola = bola + Posicao(*delta_pos)
+
+            if nova_bola.is_valido(filho.bolas):
+                filho.add_bola(nova_bola)
+            else:
+                igual_pai += 1
+                filho.add_bola(bola)
+
+        if igual_pai == 3:
+            continue
+
+        filho.check_sucessos()
+        filho.calcAvaliacao()
+        print "%10s - %2d - %s" % (move, filho.id, filho)
+        largura_stash.append(filho)
+
+        if filho.sucessos == 3:
+            return False
+
+    return True
+
+
 
 def main():
     genTabuleiro()
-    busca_largura()
+    busca_A()
+    #busca_largura()
 
 if __name__ == '__main__':
     main()
